@@ -1,12 +1,12 @@
 package com.github.bragagustavo.domain.dto;
 
 import com.github.bragagustavo.domain.entity.Address;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 
+@Builder
 public class PersonDTO {
 
     private Address address;
-
     private String name;
 
     public PersonDTO(Address address, String name) {

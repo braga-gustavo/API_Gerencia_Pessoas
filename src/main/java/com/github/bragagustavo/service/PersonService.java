@@ -22,15 +22,23 @@ public class PersonService {
     @Autowired
     private AddressRepository addressRepository;
 
-    public void insertPerson(Person person) {
-        Address address = person.getAddress();
-        addressRepository.save(address);
-        personRepository.save(person);
+    public PersonService(PersonRepository personRepository, AddressRepository addressRepository) {
+        this.personRepository = personRepository;
+        this.addressRepository = addressRepository;
     }
 
-    public Person findPerson(Long id ) {
+    public Person insertPerson(Person person) {
+          Address address = person.getAddress();
+          addressRepository.save(address);
+          Person personSaved = personRepository.save(person);
+          address.setPerson(personSaved);
+          addressRepository.save(address);
+          return personSaved;
+    }
+
+    public Person findPerson(Long id) {
         Optional<Person> person = personRepository.findById(id);
-        return person.orElseThrow(()-> new ObjectNotFoundException("Pessoa não encontrada: " + id
+        return person.orElseThrow(() -> new ObjectNotFoundException("Pessoa não encontrada: " + id
                 + "Nome: " + Person.class.getName()));
     }
 
@@ -38,20 +46,21 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    public Person updatePerson( Person  person) {
-        Person personToUpdate = findPerson(person.getId());
+    public Person updatePerson(Person personToUpdate, Person person) {
         updatePersonData(personToUpdate, person);
         addressRepository.save(personToUpdate.getAddress());
         return personRepository.save(personToUpdate);
     }
 
-    public void deletePerson(Long id) {
-        findPerson(id);
+    public void deletePerson(Person person) {
+        if (person == null || person.getId() == null){
+           throw new IllegalArgumentException("person can't be null");
+        }
        try {
-            personRepository.deleteById(id);
-        } catch (DataIntegrityViolationException e){
-           throw new DataIntegrityViolationException("Não é possivel exlcuir uma pessoa com dados cadastrados");
-       }
+            personRepository.delete(person);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Não é possivel exlcuir uma pessoa com dados cadastrados");
+        }
     }
 
     private void updatePersonData(Person personToUpdate, Person person) {
@@ -59,7 +68,11 @@ public class PersonService {
         personToUpdate.setAddress(person.getAddress());
     }
 
-    public Person fromPersonDto(PersonDTO personDTO) {
-        return new Person(personDTO.getAddress(), personDTO.getName());
+    public Person fromPersonDto(PersonDTO personDTO, Long id) {
+        return new Person( id, personDTO.getName(), personDTO.getAddress());
+    }
+
+    public Boolean updateMainAddress(Person personToUpdate, Person person) {
+        return personToUpdate.getAddress().getMainAddress();
     }
 }

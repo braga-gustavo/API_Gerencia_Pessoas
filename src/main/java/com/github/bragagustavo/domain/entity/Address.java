@@ -1,25 +1,40 @@
 package com.github.bragagustavo.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@AllArgsConstructor
+@Table
+@NoArgsConstructor
+@Builder
 public class Address {
 
     @Id
+    @Column
     @GeneratedValue
     private Long id;
+
+    @NotEmpty(message = "Campo obrigatorio")
     private String street;
+
+    @NotEmpty(message = "Campo obrigatorio")
     private String cep;
-    private String addresNumber;
+
+    @NotEmpty(message = "Campo obrigatorio")
     private String city;
-    @OneToOne
+
+    @NotEmpty
+    private String addressNumber;
+
+    private Boolean mainAddress = false;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Person person;
 
     public String getStreet() {
@@ -38,12 +53,12 @@ public class Address {
         this.cep = cep;
     }
 
-    public String getAddresNumber() {
-        return addresNumber;
+    public String getAddressNumber() {
+        return addressNumber;
     }
 
-    public void setAddresNumber(String addresNumber) {
-        this.addresNumber = addresNumber;
+    public void setAddressNumber(String addressNumber) {
+        this.addressNumber = addressNumber;
     }
 
     public String getCity() {
@@ -54,11 +69,27 @@ public class Address {
         this.city = city;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    public Boolean getMainAddress() {
+        return mainAddress;
+    }
+
+    public void setMainAddress(Boolean mainAddress) {
+        this.mainAddress = mainAddress;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }
