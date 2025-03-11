@@ -1,14 +1,13 @@
 # People Management API
 
 ## 📌 Overview
-This project is a **RESTful API** developed as part of my **Bachelor's Degree in Information Systems**. It provides an efficient way to manage people records, allowing users to **create, update, delete, and retrieve** information stored in a structured database.
+This project is a **RESTful API** developed as part of my study in Java and Spring Framework. It provides an efficient way to manage people records, allowing users to **create, update, delete, and retrieve** information stored in a structured database.
 
 ## 🚀 Features
 - **User Registration:** Add new people with structured data.
 - **Data Update & Deletion:** Modify or remove registered records.
 - **User Search:** Retrieve detailed information using unique identifiers.
 - **RESTful API:** Designed following best practices for scalability and maintainability.
-- **Secure Authentication:** JWT-based authentication to protect user data.
 
 ## 🛠️ Technologies Used
 - **Java** (Backend development)
